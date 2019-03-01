@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">My Blog</title>
+  <id>urn:uuid:cb52b05f-403e-342c-acfc-b7cadff9dee1</id>
+  <updated>2019-03-01T03:54:54.435882Z</updated>
+  <link href="https://a.xinfengtv.com/docs/" />
+  <link href="https://a.xinfengtv.com/feed.xml" rel="self" />
+  <author>
+    <name></name>
+  </author>
+  <generator uri="https://github.com/ajdavis/lektor-atom" version="0.2">Lektor Atom Plugin</generator>
+  <entry xml:base="https://a.xinfengtv.com/docs/models/">
+    <title type="text">Data Modelling</title>
+    <id>urn:uuid:720598e9-5f2b-31d1-b751-117776c84769</id>
+    <updated>2019-03-01T03:54:54.412067Z</updated>
+    <link href="https://a.xinfengtv.com/docs/models/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;What makes Lektor so powerful is the ability to model your data and to then use
+this data to generate the final results.  Getting this part right will make it
+easier later to generate beautiful looking HTML.&lt;/p&gt;
+&lt;h2 id=&quot;models&quot;&gt;Models&lt;/h2&gt;&lt;p&gt;Models are the blueprints for your pages.  They define which fields exist and
+what goes into them.  Models are stored in the &lt;code&gt;models&lt;/code&gt; folder in your project
+and are basic UTF-8 encoded INI files.  Models can have any name but if no
+model has been explicitly selected, a default model will be selected.  For
+most situations this will be the model with the name &lt;code&gt;page&lt;/code&gt;.  Detailed
+information can be found under &lt;a href=&quot;selection/&quot; class=&quot;ref&quot;&gt;Default Model Selection&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is an example of a very basic model (&lt;code&gt;models/page.ini&lt;/code&gt;):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;[model]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Page&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;{{ this.title }}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;[fields.title]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Title&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;string&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;large&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;[fields.body]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Body&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;markdown&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In this particular case, we have a model with the id &lt;code&gt;page&lt;/code&gt; (as defined by the
+filename) and a name &lt;code&gt;Page&lt;/code&gt; which will appear like that in the UI.  Pages that
+use this model will use the template expression &lt;code&gt;{{ this.title }}&lt;/code&gt; to be
+displayed in the UI.  In this case, it uses the title of the page.&lt;/p&gt;
+&lt;p&gt;There are two fields defined: a &lt;code&gt;title&lt;/code&gt; and a &lt;code&gt;body&lt;/code&gt;.  The former is just an
+unformatted string which is shown larger in the UI (&lt;code&gt;size = large&lt;/code&gt;) and the
+latter uses markdown for rendering.  This will give it a text area in the admin
+panel.&lt;/p&gt;
+&lt;h2 id=&quot;fields&quot;&gt;Fields&lt;/h2&gt;&lt;p&gt;Fields for models are ordered in the UI in the order they appear in the model.
+Most options in the field are specific to the type that is selected, but some
+are the same for all of them.&lt;/p&gt;
+&lt;p&gt;Fields not only define the behavior of the data (for instance strings and
+integers are sorted differently) but also how it's shown in the UI and what
+can be done with it in general.&lt;/p&gt;
+&lt;p&gt;The following options are used for all types:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;label&lt;/code&gt;: the label for the field.  This is shown in the UI in larger letters&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;description&lt;/code&gt;: an optional string that provides some description for the
+field that is shown in the UI to give a bit more explanation.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;addon_label&lt;/code&gt;: an optional string that is supported by all types that are
+rendered as an input field.  This string is shown as an UI label on the 
+right side of the input field to give it more context.  For instance, it can
+be used to clarify units of a field (pixel, percent etc.).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;width&lt;/code&gt;: defines the width of the input in the admin as a fraction.  For
+instance &lt;code&gt;1/4&lt;/code&gt; sets it to a quarter of the width, &lt;code&gt;1/2&lt;/code&gt; to a half etc.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;size&lt;/code&gt; can be set to &lt;code&gt;normal&lt;/code&gt;, &lt;code&gt;small&lt;/code&gt; or &lt;code&gt;large&lt;/code&gt; to affect the size a
+field is rendered in the admin UI.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;: defines the type of the field.  Depending on the type more options
+can become available.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are many different field types that are available and they are documented
+extensively in the &lt;a href=&quot;../api/db/types/&quot; class=&quot;ref&quot;&gt;types documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;model-options&quot;&gt;Model Options&lt;/h2&gt;&lt;p&gt;Models have the following options that can customize the model itself:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;: the name of the model itself.  Usually a more capitalized form of
+the filename which is the ID of the model.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;label&lt;/code&gt;: a template expression that should be used for pages that use this
+model.  Typically this expression refers to the title but not always.  For
+instance blog posts might also want to refer to the date.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hidden&lt;/code&gt;: a boolean value that indicates if the model should be hidden from
+the UI or not.  If set to &lt;code&gt;yes&lt;/code&gt; then new pages cannot select this model.
+This is very useful for models that are implied through configuration.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;protected&lt;/code&gt;: if a model is set to protected then all of its instances
+cannot be deleted once created.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;inherits&lt;/code&gt;: if you want to inherit all fields and model option settings from another model then this
+can be set to the name of another model.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In addition to that, there are some configuration sections in the model file
+that can customize more behavior.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/project/">
+    <title type="text">Project</title>
+    <id>urn:uuid:a7a31af7-3164-33b5-a82a-074fd2ee0fbc</id>
+    <updated>2019-03-01T03:54:54.412734Z</updated>
+    <link href="https://a.xinfengtv.com/docs/project/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;A project in the context of Lektor is a single website.  It's typically a
+folder that contains all the information necessary to build it.  Within that
+folder there are templates, models, content files as well as the main project
+file which acts as configuration file.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/guides/">
+    <title type="text">Guides</title>
+    <id>urn:uuid:ec979a74-118b-3e29-846e-ea22e2f31e72</id>
+    <updated>2019-03-01T03:54:54.413212Z</updated>
+    <link href="https://a.xinfengtv.com/docs/guides/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Because Lektor is quite a generic system, sometimes it might not be quite
+obvious what the best course of action is.  This part of the documentation
+contains some guides that should help you find inspiration for solving certain
+problems.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/api/">
+    <title type="text">API</title>
+    <id>urn:uuid:241c24b9-3f0a-3e21-8414-d4489879b79c</id>
+    <updated>2019-03-01T03:54:54.413680Z</updated>
+    <link href="https://a.xinfengtv.com/docs/api/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor consists of many interfaces that you can interface with through
+various different ways.  Not just when developing plugins, but also from
+within the templates.  This part of the documentation covers all those
+areas in detail.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/installation/">
+    <title type="text">Installation</title>
+    <id>urn:uuid:a68bf8fe-8c0a-3a0b-967c-29538a497794</id>
+    <updated>2019-03-01T03:54:54.416220Z</updated>
+    <link href="https://a.xinfengtv.com/docs/installation/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor comes in two flavors: as a command line executable and as a
+desktop application.  The desktop version also contains the command
+line executable, but it also bundles together all dependencies of Lektor
+in an easy to use package which heavily simplifies installation.&lt;/p&gt;
+&lt;h2 id=&quot;desktop-application&quot;&gt;Desktop Application&lt;/h2&gt;&lt;div class=&quot;admonition admonition-info&quot;&gt;&lt;p&gt;Info: Support for the Mac Desktop Application is paused as of version 3.1. See &lt;a href=&quot;/blog/2018/1/lektor-31-released/#support-for-mac-installer-paused&quot;&gt;note&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;&lt;p&gt;Currently the desktop application is only available for OS X and can be
+&lt;a href=&quot;../../downloads/&quot;&gt;downloaded from the Lektor website&lt;/a&gt;.  It comes as a downloadable
+disk image that you can mount which contains one application by the name of
+&lt;code&gt;Lektor.app&lt;/code&gt;.  Just drag it into your &lt;code&gt;Applications&lt;/code&gt; folder and you are good to
+go.&lt;/p&gt;
+&lt;p&gt;If you also want access to the command line tools just launch &lt;code&gt;Lektor.app&lt;/code&gt;
+and then click in the menu bar on &lt;em&gt;Lektor ➤ Install Shell Command&lt;/em&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;command-line-application&quot;&gt;Command Line Application&lt;/h2&gt;&lt;p&gt;If you do not want to install the desktop app then you can just install the command
+line executable.  This runs on most operating systems (OSX, Linux and Windows) but
+the installation is a bit more involved.&lt;/p&gt;
+&lt;p&gt;You need to make sure you have the following software installed on your computer:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Python 2.7 or above (also &lt;code&gt;python-dev&lt;/code&gt;, &lt;code&gt;libssl-dev&lt;/code&gt; and
+&lt;code&gt;libffi-dev&lt;/code&gt; is required on Ubuntu)
+&lt;code&gt;sudo apt-get install python-dev libssl-dev libffi-dev&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;ImageMagick (&lt;code&gt;brew install imagemagick&lt;/code&gt; can get you this on OS X and  &lt;code&gt;sudo apt-get install imagemagick&lt;/code&gt;
+on Ubuntu the &lt;code&gt;imagemagick&lt;/code&gt; package needs to be installed. 
+On Windows do &lt;code&gt;chocoinstall imagemagick&lt;/code&gt;, which requires &lt;a href=&quot;https://chocolatey.org/&quot; class=&quot;ext&quot;&gt;chocolatey&lt;/a&gt;,
+or &lt;a href=&quot;http://www.imagemagick.org&quot; class=&quot;ext&quot;&gt;download from here&lt;/a&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once you have those installed and have made sure that they are on your &lt;code&gt;PATH&lt;/code&gt;, you can
+get Lektor installed with our installation script:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# curl -sf https://www.getlektor.com/install.sh | sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you are not logged in as superuser, instead you should try this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -sf https://www.getlektor.com/install.sh | sudo sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you would like to install Lektor without being prompted, set LEKTOR_SILENT before running the prior command.&lt;/p&gt;
+&lt;p&gt;For Windows you can use the &lt;code&gt;command prompt&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;C:\&amp;gt; @powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;iex ((new-object net.webclient).DownloadString('https://getlektor.com/install.ps1'))&quot; &amp;amp;&amp;amp; SET PATH=%PATH%;%LocalAppData%\lektor-cli
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;but you can also do it directly in &lt;code&gt;Powershell&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;PS C:\&amp;gt; iex ((new-object net.webclient).DownloadString('https://getlektor.com/install.ps1'))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;pip&quot;&gt;pip&lt;/h2&gt;&lt;p&gt;Alternatively you can manually install the command line version with
+&lt;code&gt;virtualenv&lt;/code&gt; if you know how that works.  Note that this method is &lt;em&gt;heavily
+discouraged&lt;/em&gt; for anything other than advanced use cases such as build servers.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ virtualenv venv
+$ . venv/bin/activate
+$ pip install Lektor
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;admonition admonition-warning&quot;&gt;&lt;p&gt;When we say this installation type is discouraged we mean it.  The reason
+is that it encourages uses of Lektor which are entirely unsupported by us.
+Lektor actively manages virtualenvs for plugin installations in very specific
+ways and this might or might not work in your setup.  We support pip
+installations for deployment environments and local development only.&lt;/p&gt;&lt;/div&gt;&lt;h2 id=&quot;development-version&quot;&gt;Development Version&lt;/h2&gt;&lt;p&gt;If you want to install the development version of Lektor you can do so.  It's
+the same as with installing the command line application but instead of
+using PyPI you install directly from git and you need to have &lt;code&gt;npm&lt;/code&gt; installed
+to build the admin UI:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ git clone https://github.com/lektor/lektor
+$ cd lektor
+$ make build-js
+$ virtualenv venv
+$ . venv/bin/activate
+$ pip install --editable .
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/themes/">
+    <title type="text">Themes</title>
+    <id>urn:uuid:9c386a65-34c1-32a3-bfdc-e60ca0080cf0</id>
+    <updated>2019-03-01T03:54:54.417399Z</updated>
+    <link href="https://a.xinfengtv.com/docs/themes/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;div class=&quot;admonition admonition-warning&quot;&gt;&lt;p&gt;Lektor theme support is new. It should be considered
+unstable and could change in the future.&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;admonition admonition-info&quot;&gt;&lt;p&gt;&lt;em&gt;New in Lektor Version 3.1:&lt;/em&gt; Themes did not exist in earlier Lektor versions.&lt;/p&gt;&lt;/div&gt;&lt;p&gt;Lektor provides a themes system to easily implement, reuse, and distribute themes.
+This allows you to use assets, templates, models, and / or flowblocks built into the theme.
+Themes are created by the Lektor community.&lt;/p&gt;
+&lt;p&gt;Lektor themes work like an extension of the project, allowing you to easily adopt features of the theme such as styles, models, or templates. In all, themes can provide:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;templates&lt;/li&gt;
+&lt;li&gt;models&lt;/li&gt;
+&lt;li&gt;flowblocks&lt;/li&gt;
+&lt;li&gt;assets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Themes can provide all of these as defaults which can be overridden or extended by your project. For instance, if a theme provides a root &lt;code&gt;page.html&lt;/code&gt; template, you can create other templates that &lt;code&gt;{% extends &quot;page.html&quot; %}&lt;/code&gt;, or you could override the theme's &lt;code&gt;page.html&lt;/code&gt; by providing your own in your project's normal &lt;code&gt;templates/&lt;/code&gt; directory.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/quickstart/">
+    <title type="text">Quickstart</title>
+    <id>urn:uuid:51ac78b2-2166-3ca7-b012-c9453be176ba</id>
+    <updated>2019-03-01T03:54:54.419822Z</updated>
+    <link href="https://a.xinfengtv.com/docs/quickstart/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;The best way to get started with Lektor is to use the &lt;code&gt;quickstart&lt;/code&gt; command to
+let Lektor generate a basic project layout for you.  This requires the use of
+the command line client which is the recommended way to do development until
+the website is ready for end user management.&lt;/p&gt;
+&lt;p&gt;If you do not have the &lt;code&gt;lektor&lt;/code&gt; &lt;a href=&quot;../cli/&quot; class=&quot;ref&quot;&gt;command line executable&lt;/a&gt;
+available yet just consult the &lt;a href=&quot;../installation&quot; class=&quot;ref&quot;&gt;Installation&lt;/a&gt; section of
+the documentation.&lt;/p&gt;
+&lt;h2 id=&quot;creating-a-new-project&quot;&gt;Creating a New Project&lt;/h2&gt;&lt;p&gt;To create a new project open a terminal and navigate to the preferred location
+of your project.  Then execute the quickstart command to create a new project:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor quickstart
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will ask you a few questions and then create a new Lektor project with
+some basic configuration for you.&lt;/p&gt;
+&lt;h2 id=&quot;screencast&quot;&gt;Screencast&lt;/h2&gt;&lt;p&gt;If you want a video walkthrough you can have a look at the screencast which
+explains the quickstart project a bit:&lt;/p&gt;
+&lt;iframe width=&quot;100%&quot; height=&quot;410&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;allowfullscreen&quot;
+  src=&quot;https://www.youtube.com/embed/lTWTCwuPdrU?autoplay=0&amp;fs=1&quot;&gt;
+&lt;/iframe&gt;&lt;h2 id=&quot;running-your-project&quot;&gt;Running your Project&lt;/h2&gt;&lt;p&gt;Now that you have a project you can run it.  As a developer the easiest way to
+do that is to use the &lt;code&gt;server&lt;/code&gt; which runs the project on your local machine
+as if it was a dynamic website.&lt;/p&gt;
+&lt;p&gt;All you have to do is to enter your project directory and run it:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd yourproject
+$ lektor server
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will automatically start the server and you can navigate to
+&lt;a href=&quot;http://localhost:5000/&quot;&gt;localhost:5000&lt;/a&gt; to open the project.&lt;/p&gt;
+&lt;p&gt;You can keep the server running, it will automatically rebuild your files as
+they change.&lt;/p&gt;
+&lt;h2 id=&quot;accessing-the-admin&quot;&gt;Accessing the Admin&lt;/h2&gt;&lt;p&gt;While the development server is running you can use the built-in admin
+interface.  It can be accessed by clicking on the pencil symbol on a page
+or by manually navigating to &lt;code&gt;/admin/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;admin.png&quot; class=&quot;screenshot&quot; alt=&quot;screenshot of the admin&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;building&quot;&gt;Building&lt;/h2&gt;&lt;p&gt;When you want to build the website for distribution you can make Lektor build
+everything into static files.  In fact, that's already happening in the
+background while the development server is running.  If you want to trigger
+a build you can use the &lt;code&gt;build&lt;/code&gt; command.  By default it builds into a lektor
+cache directory.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor build
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can also explicitly provide a path if you are not satisfied with the
+default directory.  To see where this directory is you can use the
+&lt;code&gt;project-info&lt;/code&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor project-info --output-path
+/Users/john/.../build-cache/6fdaeecab78d6aa99f86f586ab15da06
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;All your generated files will end up in that folder for easy publishing.&lt;/p&gt;
+&lt;h2 id=&quot;next-steps&quot;&gt;Next Steps&lt;/h2&gt;&lt;p&gt;Now that you have done that, you might be interested in diving deeper into
+Lektor.  These might be good next steps:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;a href=&quot;../guides/&quot; class=&quot;ref&quot;&gt;Guides&lt;/a&gt; which cover common setups.&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&quot;../deployment/&quot; class=&quot;ref&quot;&gt;Deployment Documentation&lt;/a&gt; which shows how to
+deploy a website to production.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../models/&quot; class=&quot;ref&quot;&gt;Data Modelling&lt;/a&gt; for everything about how to model your
+data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;admonition admonition-tip&quot;&gt;&lt;p&gt;This website is built on Lektor as well.  You can find the sources of it
+&lt;a href=&quot;https://github.com/lektor/lektor-website/&quot; class=&quot;ext&quot;&gt;on GitHub&lt;/a&gt; and you can click
+at any point on the source symbol (&lt;i class=&quot;fa fa-code&quot;&gt;&lt;/i&gt;) on the bottom
+to see the source for the current page.&lt;/p&gt;&lt;/div&gt;</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/plugins/">
+    <title type="text">Plugins</title>
+    <id>urn:uuid:a524b148-023c-3412-a7a7-70b532bc2cc8</id>
+    <updated>2019-03-01T03:54:54.422031Z</updated>
+    <link href="https://a.xinfengtv.com/docs/plugins/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor can be extended through the use of plugins.  This is something that
+can be done on a per-project basis.  This gives a quick overview of how
+to use plugins and how to build your own.&lt;/p&gt;
+&lt;h2 id=&quot;installing-published-plugins&quot;&gt;Installing Published Plugins&lt;/h2&gt;&lt;p&gt;Lektor can find and install plugins that have been published to &lt;a href=&quot;https://pypi.org/&quot; class=&quot;ext&quot;&gt;PyPI&lt;/a&gt; for you.
+For completely automated plugin management just open your project file in a
+text editor and edit or extend the &lt;code&gt;[packages]&lt;/code&gt; section.  Just add a line
+for each plugin in the form &lt;code&gt;name = version&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;[packages]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;lektor-cool-plugin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1.0&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;lektor-other-plugin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1.2&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;It's also possible to use the &lt;a href=&quot;../cli/plugins/add/&quot; class=&quot;ref&quot;&gt;plugins add&lt;/a&gt; command
+&lt;code&gt;lektor plugin add NAME&lt;/code&gt; to automatically add the latest version of a plugin
+to the project file.&lt;/p&gt;
+&lt;p&gt;To upgrade a plugin just increase the version number to the release you want
+and Lektor will do the rest.&lt;/p&gt;
+&lt;h2 id=&quot;loading-plugins&quot;&gt;Loading Plugins&lt;/h2&gt;&lt;p&gt;Plugins can be added to a Lektor project in two different ways:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Plugins can be added to the &lt;code&gt;[packages]&lt;/code&gt; section of the project.  In that
+case Lektor will automatically download and enable the plugin next time
+you build the project or run the server. This can be accomplished for you
+with the automatic install above, or it can be done manually.&lt;/li&gt;
+&lt;li&gt;Plugins can be added to the &lt;code&gt;packages/&lt;/code&gt; folder in your project.  Each
+plugin has to go into a separate folder.  This method is especially useful
+for project specific plugins or for plugin development.&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/cli/">
+    <title type="text">Command Line</title>
+    <id>urn:uuid:40a50eca-983c-351d-82df-eec2c655037f</id>
+    <updated>2019-03-01T03:54:54.423590Z</updated>
+    <link href="https://a.xinfengtv.com/docs/cli/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor comes with a handy &lt;code&gt;lektor&lt;/code&gt; command line executable you can use from
+your terminal to manage all of Lektor in addition to the GUI.  If you do
+not have the Lektor command available because you only installed the GUI,
+have a look at &lt;a href=&quot;../installation/&quot; class=&quot;ref&quot;&gt;Installation Documentation&lt;/a&gt; to see
+how to remedy this.&lt;/p&gt;
+&lt;p&gt;All the commands documented here show up as subcommands to the global
+&lt;code&gt;lektor&lt;/code&gt; command.  So to invoke &lt;code&gt;build&lt;/code&gt; you would write &lt;code&gt;lektor build&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;options&quot;&gt;Options&lt;/h2&gt;&lt;p&gt;There are some general options that can be set on the &lt;code&gt;lektor&lt;/code&gt; command
+to change the behavior.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--project PATH&lt;/code&gt;: explicitly provide the path to the project to work on.
+If this is not provided then the project is searched upwards from the
+current working directory until a folder is found with a single
+&lt;code&gt;.lektorproject&lt;/code&gt; file in it.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--version&lt;/code&gt;: if this is passed it prints out the version of Lektor and
+aborts further execution.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--help&lt;/code&gt;: prints out help about the command line interface.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;environment-variables&quot;&gt;Environment Variables&lt;/h2&gt;&lt;p&gt;There are a few environment variables which control how Lektor executes:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;LEKTOR_PROJECT&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;This can be used alternatively to &lt;code&gt;--project&lt;/code&gt; to set the path to a
+project that Lektor should be using.  If neither this variable nor
+&lt;code&gt;--project&lt;/code&gt; is set, Lektor will look for a project upwards from the current
+working directory.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;LEKTOR_OUTPUT_PATH&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;Overrides the default output path with a different path.  By default the
+output path will be a path unique to the project but in a default cache
+folder under Lektor's control.  &lt;code&gt;--output-path&lt;/code&gt; on some commands overrides
+this value.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/search/">
+    <title type="text">Search</title>
+    <id>urn:uuid:d4b3acf1-d1cd-32e5-be84-35cc2089aff8</id>
+    <updated>2019-03-01T03:54:54.424180Z</updated>
+    <link href="https://a.xinfengtv.com/docs/search/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Not sure where to find something?  Here you can search the Lektor
+documentation:&lt;/p&gt;
+&lt;div class=&quot;google-custom-search&quot;&gt;
+  &lt;form method=get&gt;
+    &lt;div class=&quot;input-group&quot;&gt;
+      &lt;input type=text class=&quot;form-control&quot; name=q size=40 autofocus&gt;
+      &lt;span class=&quot;input-group-btn&quot;&gt;
+        &lt;input type=submit class=&quot;btn btn-default&quot; value=&quot;Search&quot;&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+  &lt;div class=&quot;search-usage-info&quot;&gt;Powered by Google&lt;/div&gt;
+&lt;/div&gt;</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/deployment/">
+    <title type="text">Deployment</title>
+    <id>urn:uuid:fdcc26b1-8655-32c6-a097-3c2e026774f4</id>
+    <updated>2019-03-01T03:54:54.427305Z</updated>
+    <link href="https://a.xinfengtv.com/docs/deployment/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;A website is only a website if other people can look at it.  While you are
+developing locally that's not really all that helpful.  So how do you get
+your changes up to your favorite web host?  This is where &lt;a href=&quot;../cli/deploy/&quot; class=&quot;ref&quot;&gt;lektor deploy&lt;/a&gt; comes in.&lt;/p&gt;
+&lt;h2 id=&quot;deploying-in-two-steps:&quot;&gt;Deploying in Two Steps:&lt;/h2&gt;&lt;p&gt;Deploying a website in Lektor is a two step process:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;build&lt;/li&gt;
+&lt;li&gt;deploy&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Keep this in mind.  A deploy will not implicitly build!  This means that if
+you deploy without building first you might send up a completely wrong
+version!  Also more importantly: &lt;em&gt;never deploy unless the build finished
+successfully&lt;/em&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-build-pipeline&quot;&gt;The Build Pipeline&lt;/h2&gt;&lt;p&gt;So let's cover the building first.  When you use the Lektor server locally,
+Lektor constantly builds out your website into static HTML files behind the
+scenes into the default build folder.  This folder is in an operating system
+specific location.  If you want to know where that folder is, you can use this
+command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor project-info --output-path
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Additionally you can manually provide a different path if you kick off a
+manual build:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor build --output-path my-folder
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Generally we strongly recommend to use the default build folder when deploying
+from your own machine because it will be faster since the build can reuse
+what the development server already did.  If you want to deploy from a build
+server it might make more sense to provide absolute paths.&lt;/p&gt;
+&lt;h2 id=&quot;lektor-assisted-deployments&quot;&gt;Lektor Assisted Deployments&lt;/h2&gt;&lt;p&gt;Currently Lektor can deploy via &lt;code&gt;rsync&lt;/code&gt; and &lt;code&gt;ftp&lt;/code&gt; automatically.  To enable
+this functionality you need to configure this in the config file.  For each
+potential deployment target add a &lt;code&gt;[servers.NAME]&lt;/code&gt; section.  The supported
+keys are &lt;code&gt;name&lt;/code&gt; for an optional human readable name of the server, &lt;code&gt;enabled&lt;/code&gt; to
+enable or disable it (defaults to &lt;code&gt;true&lt;/code&gt;) and &lt;code&gt;target&lt;/code&gt; which is the URL to
+publish to.  Additionally one of the servers can have &lt;code&gt;default&lt;/code&gt; set to &lt;code&gt;yes&lt;/code&gt;
+to set it as default.  Here is an example:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;[servers.production]&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Production&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;enabled&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;rsync://server/path/to/folder&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To trigger a deploy you can use the &lt;a href=&quot;../cli/deploy/&quot; class=&quot;ref&quot;&gt;deploy&lt;/a&gt; command:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor deploy production
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Or because it's the default server, you can just do this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor deploy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This deploys the latest state of what was built from the default build
+folder.  It does not build itself!  So to do both in one go, do something like
+this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor build &amp;amp;&amp;amp; lektor deploy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you want to provide a different build folder, provide it explicitly with
+&lt;code&gt;--output-path&lt;/code&gt; to both &lt;code&gt;build&lt;/code&gt; and &lt;code&gt;deploy&lt;/code&gt;.  This can also be set with
+the &lt;code&gt;LEKTOR_OUTPUT_PATH&lt;/code&gt; environment variable.&lt;/p&gt;
+&lt;div class=&quot;admonition admonition-warning&quot;&gt;&lt;p&gt;&lt;strong&gt;Note on credentials&lt;/strong&gt;: For FTP and other systems it is possible to embed
+the credentials directly in the URL.  If you do this, please ensure that
+you keep your project file secure as loss of the project file can mean that
+people get access to your server.  Alternatively you can also provide username
+and password through the command line or environment variables.&lt;/p&gt;&lt;/div&gt;&lt;p&gt;The following targets are supported for the &lt;code&gt;target&lt;/code&gt; field natively:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;rsync/&quot;&gt;rsync&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;ftp/&quot;&gt;FTP&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;ghpages/&quot;&gt;GitHub Pages&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;In addition&lt;/strong&gt;, there are &lt;a href=&quot;../../plugins/categories/deploy/&quot; class=&quot;ref&quot;&gt;third-party plugins&lt;/a&gt; available for additional deploy targets.&lt;/p&gt;
+&lt;h2 id=&quot;manual-deployments&quot;&gt;Manual Deployments&lt;/h2&gt;&lt;p&gt;If you want to manually deploy something through the favorite tool of yours
+you can do that easily as well.  For instance if you want to deploy to S3
+with &lt;a href=&quot;http://s3tools.org/s3cmd-sync&quot;&gt;s3cmd&lt;/a&gt; you could do this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ lektor build &amp;amp;&amp;amp; s3cmd sync &quot;$(lektor project-info --output-path)&quot;/* &quot;s3://my-bucket/some/path&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Assisted deployments are also supported directly from the admin UI.  There is a
+publish button that can be used to send the changes up.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/templates/">
+    <title type="text">Templates</title>
+    <id>urn:uuid:8bac6e05-cecd-35b7-9cc3-80dfaf0affc9</id>
+    <updated>2019-03-01T03:54:54.432328Z</updated>
+    <link href="https://a.xinfengtv.com/docs/templates/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor uses the &lt;a href=&quot;http://jinja.pocoo.org/&quot; class=&quot;ext&quot;&gt;Jinja2&lt;/a&gt; templating language for
+generating HTML out of your pages.  You do not need to understand Jinja2 to
+be able to generate beautiful websites but if you want to dive deep into the
+powers of the templating language then you can learn more about it by
+reading the &lt;a href=&quot;http://jinja.pocoo.org/docs&quot; class=&quot;ext&quot;&gt;Jinja2 Documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&quot;admonition admonition-info&quot;&gt;&lt;p&gt;Templates are a very powerful component in Lektor.  A lot of documentation
+about the features of it can be found in the &lt;a href=&quot;http://jinja.pocoo.org/docs&quot; class=&quot;ext&quot;&gt;Jinja2 Documentation&lt;/a&gt; as well as the &lt;a href=&quot;../api/templates/&quot; class=&quot;ext&quot;&gt;Lektor Template API
+Documentation&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;&lt;h2 id=&quot;template-folder-and-naming&quot;&gt;Template Folder and Naming&lt;/h2&gt;&lt;p&gt;All templates are stored within the &lt;code&gt;templates/&lt;/code&gt; folder.  Templates typically
+carry a &lt;code&gt;.html&lt;/code&gt; extension.  The default naming convention which is used in
+Lektor is that the template name matches the model name.&lt;/p&gt;
+&lt;p&gt;So if you have a model called &lt;code&gt;page&lt;/code&gt; there would be a template named
+&lt;code&gt;page.html&lt;/code&gt;.  Pages can however manually force a different template to be
+rendered.&lt;/p&gt;
+&lt;h2 id=&quot;template-context&quot;&gt;Template Context&lt;/h2&gt;&lt;p&gt;When a template is rendered it's rendered in the context of a few variables.
+Which ones are available often depends on the situation the template is
+evaluated in but the following are always available:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;&lt;tr&gt;
+&lt;th&gt;Variable&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;this&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;The current &lt;a href=&quot;../api/db/record/&quot; class=&quot;ref&quot;&gt;Record&lt;/a&gt; that is being rendered.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;site&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;The database &lt;a href=&quot;../api/db/pad/&quot; class=&quot;ref&quot;&gt;Pad&lt;/a&gt; that can be used to query the site.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;alt&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;A string that identifies the &lt;a href=&quot;../content/alts/&quot; class=&quot;ref&quot;&gt;Alternative&lt;/a&gt; of the page.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;config&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Gives access to the Lektor project configuration.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&quot;the-first-template&quot;&gt;The First Template&lt;/h2&gt;&lt;p&gt;So let's dive in making our first template.  In case you went through the
+&lt;a href=&quot;../quickstart/&quot; class=&quot;ref&quot;&gt;Quickstart&lt;/a&gt; you should already have an example model
+to work with called &lt;code&gt;page&lt;/code&gt;, otherwise just add one with the format shown
+in the &lt;a href=&quot;../models/&quot; class=&quot;ref&quot;&gt;Data Modelling Documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;With that we can create a page template named &lt;code&gt;templates/page.html&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;layout.html&amp;quot;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;this.title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;}}{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;endblock&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;this.title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;cp&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;this.body&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;}}&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;endblock&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you are unfamiliar with Jinja this template might look very confusing, but
+worry not.  We will go through it step by step.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;{%&lt;/code&gt; starts a Jinja section and &lt;code&gt;%}&lt;/code&gt; ends it&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;extends&lt;/code&gt; is a tag that instructs Jinja to extend another template.  In
+this case we extend our layout template.  We will create this next.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;block&lt;/code&gt; creates or updates a block from the layout template.  In this case
+we have two blocks: one for the &lt;code&gt;title&lt;/code&gt; of the page and another one for
+the &lt;code&gt;body&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;{{&lt;/code&gt; prints a variable and &lt;code&gt;}}&lt;/code&gt; is the end of the print part.  We do not
+need to worry about escaping here as Jinja2 does that automatically for
+us.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;layout-templates&quot;&gt;Layout Templates&lt;/h2&gt;&lt;p&gt;So we have this page template now, but what about this layout?  Jinja2
+supports template inheritance where one template can inherit code from
+another.  In this case we configured our page template to inherit from
+&lt;code&gt;layout.html&lt;/code&gt;.  Let's create it:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!doctype html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;Welcome&lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;endblock&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt; — My Website&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;My Website&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;h1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;nav&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+      Navigation can go here.
+    &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;nav&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;page&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;cp&quot;&gt;{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;body&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}{%&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;endblock&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;%}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I hope you can see how the blocks work together now when template inheritance
+is involved.&lt;/p&gt;
+&lt;h2 id=&quot;everything-about-templates&quot;&gt;Everything about Templates&lt;/h2&gt;&lt;p&gt;Templates are the bread and butter of creating expressive websites with
+Lektor.  As such this is one of the most complex topics in the documentation
+and split into smaller parts.  Feel free to experiment around to see what
+you can do with it.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/content/">
+    <title type="text">Content</title>
+    <id>urn:uuid:8cd7725f-24d9-3348-8d54-b11279ba1d0e</id>
+    <updated>2019-03-01T03:54:54.434409Z</updated>
+    <link href="https://a.xinfengtv.com/docs/content/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;Lektor builds a website by taking all the files in the &lt;code&gt;content/&lt;/code&gt; folder,
+processing them according to the rules of your &lt;a href=&quot;../models/&quot; class=&quot;ref&quot;&gt;Models&lt;/a&gt;
+and rendering them by using templates.  Don't worry.  It's easier than it
+sounds.&lt;/p&gt;
+&lt;h2 id=&quot;one-folder-one-page&quot;&gt;One Folder — One Page&lt;/h2&gt;&lt;p&gt;Each page (or each URL) corresponds to a folder below the &lt;code&gt;content/&lt;/code&gt; folder.
+There can be as many folders as you want and they can be arbitrarily nested.
+Within each folder there needs to be at least one file, the content file:
+&lt;code&gt;contents.lr&lt;/code&gt;.  Into that file, your data goes.&lt;/p&gt;
+&lt;p&gt;All the other files in a folder are considered attachments of the page.&lt;/p&gt;
+&lt;p&gt;Here is an example structure from a website:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;content/
+  contents.lr
+  portfolio/
+    contents.lr
+    project-a/
+      contents.lr
+      thumbnail.jpg
+    project-b/
+      contents.lr
+      thumbnail.jpg
+  about/
+    contents.lr
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;one-page-one-url&quot;&gt;One Page — One URL&lt;/h2&gt;&lt;p&gt;Out of each &lt;code&gt;contents.lr&lt;/code&gt; file, Lektor builds exactly one final page on
+exactly one URL.  So if you have &lt;code&gt;content/portfolio/project-a/contents.lr&lt;/code&gt;
+the rendered end result will be at &lt;code&gt;/portfolio/project-a/&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;page-model-and-template&quot;&gt;Page, Model and Template&lt;/h2&gt;&lt;p&gt;Each page is associated with a model and a template.  Each page needs to have
+a model that defines which fields exist.  The template by default matches the
+model name but it can be overridden on a per-page basis.&lt;/p&gt;
+&lt;p&gt;So how is the model selected?  Either explicitly in the &lt;code&gt;contents.lr&lt;/code&gt; file
+with the &lt;code&gt;_model&lt;/code&gt; key or by configuration and convention.  Lektor will
+select the default model based on trying things in this order:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;configured model in contents file&lt;/li&gt;
+&lt;li&gt;model configured from a parent model for all children&lt;/li&gt;
+&lt;li&gt;model matching the page ID&lt;/li&gt;
+&lt;li&gt;the model named &lt;code&gt;page&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The template is always the name of the model with &lt;code&gt;.html&lt;/code&gt; as extension.  It
+can be overridden in the content file with the &lt;code&gt;_template&lt;/code&gt; field.&lt;/p&gt;
+&lt;h2 id=&quot;content-file-format&quot;&gt;Content File Format&lt;/h2&gt;&lt;p&gt;So now it's time to talk about the content file.  The content file is just a
+UTF-8 encoded text file with the &lt;code&gt;.lr&lt;/code&gt; extension.  It can be edited with any
+text editor that supports UTF-8 as character encoding.  This file consists of
+multiple data fields according to the model.  The format is very simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;_model: page
+---
+title: The Page Title
+---
+body:
+
+The page body goes here
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Fields are separated by three dashes &lt;code&gt;---&lt;/code&gt; and follow the format &lt;code&gt;key: value&lt;/code&gt;.
+For values with multiple lines it's recommended to insert two newlines after
+the key.  The format of each field is specific to how the model is configured.&lt;/p&gt;
+&lt;p&gt;Some fields are plain text, others can be markdown syntax and more.  These
+fields become available for rendering in the template automatically.&lt;/p&gt;
+&lt;div class=&quot;admonition admonition-tip&quot;&gt;&lt;p&gt;If you want to use &lt;code&gt;---&lt;/code&gt; itself in the document text, just add another
+dash.  This means &lt;code&gt;----&lt;/code&gt; will render as &lt;code&gt;---&lt;/code&gt; and &lt;code&gt;-----&lt;/code&gt; will render as
+&lt;code&gt;----&lt;/code&gt; etc.&lt;/p&gt;&lt;/div&gt;&lt;p&gt;Fields prefixed with an underscore are so-called system fields.  They are
+provided by Lektor and customize behavior within Lektor.  For a list of
+available fields see &lt;a href=&quot;../api/db/system-fields/&quot; class=&quot;ref&quot;&gt;System Fields&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="https://a.xinfengtv.com/docs/what/">
+    <title type="text">What is Lektor</title>
+    <id>urn:uuid:9d01977c-84e0-3dea-a930-a0d2b6278cfa</id>
+    <updated>2019-03-01T03:54:54.435882Z</updated>
+    <link href="https://a.xinfengtv.com/docs/what/" />
+    <author>
+      <name></name>
+    </author>
+    <content type="html">&lt;p&gt;When it comes to creating websites, there is a ludicrous number of tools available.
+They range from full-blown content management solutions like Drupal to
+desktop solutions like Google Web Designer to Cloud Hosted Website solutions
+like WIX to more programmer focused approaches like Jekyll which generate
+websites out of templates and markdown files.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Lektor is different from any of these.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;lektor-is-static&quot;&gt;Lektor is Static&lt;/h2&gt;&lt;p&gt;Lektor learned from the huge range of static file generators like Jekyll,
+Pelican, Hugo, Middleman and many more about the value of generating a
+completely static website.  This means that unlike WordPress or similar
+solutions it does not run on a server, but your local computer (or a build
+server), and generates static HTML that can be uploaded to any web server or
+content distribution platform like S3 with CloudFront.&lt;/p&gt;
+&lt;p&gt;Why go static?  Because the vast, vast majority of websites will be read many
+more times than they will be updated.  This is crucial because dynamic content
+does not come for free.  It needs server resources and because program code is
+running there it needs to be kept up to date for to ensure there are no security
+problems that are left unpatched.  Also when a website gets a sudden spike of
+traffic a static website will stay up for longer on the same server than a
+dynamic one that needs to execute code.&lt;/p&gt;
+&lt;p&gt;Sure, there are some things you cannot do on a static website, but those are not
+things you would use Lektor for.  For small dynamic sections, JavaScript
+paired up with other services is a good solution.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;static.png&quot; alt=&quot;&quot; class=&quot;screenshot&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;lektor-is-a-cms&quot;&gt;Lektor is a CMS&lt;/h2&gt;&lt;p&gt;Lektor takes from content management systems like WordPress and provides a
+flexible browser-based admin interface from which you can edit your website's
+contents.  Unlike traditional CMS solutions, however, it runs entirely on your
+own computer.&lt;/p&gt;
+&lt;p&gt;This means you can give a Lektor website to people that have no understanding
+of programming and they can still modify the content and update the website.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;admin.png&quot; alt=&quot;&quot; class=&quot;screenshot&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;lektor-is-a-framework&quot;&gt;Lektor is a Framework&lt;/h2&gt;&lt;p&gt;Lastly, Lektor learns from experience in writing web frameworks.  Lektor
+is much more than a website generator because it is based on a very flexible
+internal flat file database which can be used to model any website content.
+Unlike static blog generators which are based on some markdown content and
+“front matter” metadata Lektor's content is 100% configurable.&lt;/p&gt;
+&lt;p&gt;If you have ever used a web framework like Django or Ruby on Rails you might
+feel right at home in how you can model and query your data.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;templates.png&quot; alt=&quot;&quot; class=&quot;screenshot&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;collaborate-and-synchronize&quot;&gt;Collaborate and Synchronize&lt;/h2&gt;&lt;p&gt;Lektor acknowledges that there are web developers and content editors and that
+their interests and preferences are very different.  This is reflected heavily
+in the design of Lektor and if you make your first Lektor project you can see
+why.  A web developer would go in and setup the theme and structure of a
+Lektor project and content creators can then fill in the content of the site.&lt;/p&gt;
+&lt;p&gt;The collaboration can be based on version control systems like git or just
+basic solutions like Dropbox.  It's intentionally built so that collaboration
+can work via the most basic systems like Dropbox or just network shares.&lt;/p&gt;
+&lt;p&gt;When you go live, you can synchronize up your changes into a remote server
+just as easily.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;git.png&quot; alt=&quot;&quot; class=&quot;screenshot&quot;&gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
